@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.log
+
+# Virtual environments
+.venv/
+mp_env_3114/
+
+# VSCode or PyCharm project files
+.vscode/
+.idea/
+
+# Word documents
+*.docx
+~$*
+
+# OS files
+.DS_Store
+
+# Model checkpoints (if you want to ignore)
+# pose_action_lstm_model.h5
+# *.npy
