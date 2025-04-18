@@ -1,7 +1,10 @@
+# A real-time plank posture, form-checker, and coach
+# Form Checking: Head Angle + Sagging Hips
+
 import cv2
 import numpy as np
 import mediapipe as mp
-import pyttsx3
+import pyttsx3 # for verbal feedback
 import time
 
 # initialize
@@ -9,12 +12,13 @@ mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
 pose = mp_pose.Pose()
 engine = pyttsx3.init()
-engine.setProperty('rate', 150)
+engine.setProperty('rate', 150) # speech rate set to 150 words per minute
 
 def speak(text):
     engine.say(text)
     engine.runAndWait()
 
+# calculates the angle between three points - nose, mid_shoulder, mid_hip
 def calculate_angle(a, b, c):
     a, b, c = np.array(a), np.array(b), np.array(c)
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
@@ -31,7 +35,7 @@ plank_active = False
 last_announce = 0
 
 # error speaking reminder gap
-ERROR_SPEAK_INTERVAL = 3.0  # 3 seconds for repeate error
+ERROR_SPEAK_INTERVAL = 3.0  # 3 seconds for repeat error
 last_error_speak_time = {
     "hips_sagging": 0,
     "head_bad": 0
@@ -71,17 +75,17 @@ while cap.isOpened():
         head_angle = calculate_angle(nose, mid_shoulder, mid_hip)
 
         # check 
-        hips_sagging = avg_hip_y > avg_shoulder_y + 0.05
-        head_bad = head_angle < 135 or head_angle > 195 
+        hips_sagging = avg_hip_y > avg_shoulder_y + 0.05 # checks if hips are too low
+        head_bad = head_angle < 135 or head_angle > 195 # checks if head is in appropriate angle
         current_time = time.time()
 
-        if hips_sagging and current_time - last_error_speak_time["hips_sagging"] > ERROR_SPEAK_INTERVAL:
+        if hips_sagging and current_time - last_error_speak_time["hips_sagging"] > ERROR_SPEAK_INTERVAL: # will not repeat the error if it's been less than 3 seconds since the last same-type error was made
             feedback = "Raise your hips!"
             speak("Raise your hips!")
             plank_active = False
             last_error_speak_time["hips_sagging"] = current_time
             start_time = time.time()  # pause time count
-        elif head_bad and current_time - last_error_speak_time["head_bad"] > ERROR_SPEAK_INTERVAL:
+        elif head_bad and current_time - last_error_speak_time["head_bad"] > ERROR_SPEAK_INTERVAL: # will not repeat the error if it's been less than 3 seconds since the last same-type error was made
             feedback = "Keep head neutral!"
             speak("Keep head neutral!")
             last_error_speak_time["head_bad"] = current_time 
@@ -97,18 +101,18 @@ while cap.isOpened():
                 elapsed_time = time.time() - start_time
                 if int(elapsed_time) // 10 > last_announce:
                     last_announce = int(elapsed_time) // 10
-                    speak(f"{last_announce * 10} seconds")
+                    speak(f"{last_announce * 10} seconds") # makes this announcement at each 10-second interval
 
         # text on the top left corner
         cv2.putText(image, f"Head angle: {int(head_angle)}", (10, 40),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
         cv2.putText(image, f"Feedback: {feedback}", (10, 80),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255) if "Raise" in feedback or "Keep" in feedback else (0, 255, 0), 2)
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255) if "Raise" in feedback or "Keep" in feedback else (0, 255, 0), 2) # red if providing feedback ("Raise"), green if everything is ok ("Keep")
         cv2.putText(image, f"Time: {int(elapsed_time)}s", (10, 120),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2)
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2) # displays the total elapsed time for the plank
 
     cv2.imshow("Plank Feedback", image)
-    if cv2.waitKey(10) & 0xFF == ord('q'):
+    if cv2.waitKey(10) & 0xFF == ord('q'): # press 'q' to exit
         break
 
 cap.release()

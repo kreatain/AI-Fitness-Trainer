@@ -1,3 +1,8 @@
+# This code trains an LSTM model to recognize poses
+# a whole sequence of frame data is passed at once to the LSTM model (this is one input)
+# the LSTM model makes a prediction for each frame in the one input sequence
+# the sequence length is 70, so it will make 70 predictions on what the pose was (plank, pushup, squat)
+
 import numpy as np
 import pandas as pd
 import os

@@ -1,3 +1,6 @@
+# This is a real-time push-up form analyzer and counter
+# Form checking: elbow angle + hip-to-shoulder comparison
+
 import cv2
 import numpy as np
 import mediapipe as mp
@@ -14,6 +17,7 @@ mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
 pose = mp_pose.Pose()
 
+# computes the angle between the shoulder, elbow, and wrist
 def calculate_angle(a, b, c):
     a, b, c = np.array(a), np.array(b), np.array(c)
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
@@ -46,7 +50,7 @@ while cap.isOpened():
         landmarks = results.pose_landmarks.landmark
 
         # extract key points
-        left_shoulder = [landmarks[11].x, landmarks[11].y]
+        left_shoulder = [landmarks[11].x, landmarks[11].y] # left shoulder is located at the 11th landmark slot
         right_shoulder = [landmarks[12].x, landmarks[12].y]
         left_elbow = [landmarks[13].x, landmarks[13].y]
         right_elbow = [landmarks[14].x, landmarks[14].y]
@@ -76,14 +80,14 @@ while cap.isOpened():
             stage = 'up'
 
             error_msgs = []
-            if min_elbow_angle > 90:
+            if min_elbow_angle > 90: # user not going deep enough
                 error_msgs.append("Go deeper")
             if hip_higher_than_shoulder:
                 error_msgs.append("Lower your hips")
 
             if error_msgs:
                 for msg in error_msgs:
-                    speak(msg)
+                    speak(msg) # provides voice feedback
                 feedback = " / ".join(error_msgs)
             else:
                 counter += 1
@@ -95,13 +99,13 @@ while cap.isOpened():
 
     # text 
     cv2.putText(image, f"Feedback: {feedback}", (10, 90),
-                cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0) if "Good" in feedback else (0, 0, 255), 2)
+                cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0) if "Good" in feedback else (0, 0, 255), 2) # green for positive feedback, red for negative feedback
 
     cv2.putText(image, f"Push-up Count: {counter}", (10, 130),
                 cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2)
 
     cv2.imshow('Push-up Feedback', image)
-    if cv2.waitKey(10) & 0xFF == ord('q'):
+    if cv2.waitKey(10) & 0xFF == ord('q'): # press 'q' to quit
         break
 
 cap.release()

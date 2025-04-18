@@ -1,3 +1,5 @@
+# This is a real-time pose prediction system
+
 import cv2
 import numpy as np
 import mediapipe as mp
@@ -8,17 +10,17 @@ import time
 # init
 mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
-pose = mp_pose.Pose()
-model = load_model('pose_action_lstm_model.h5')
-label_encoder = np.load('label_encoder_classes.npy', allow_pickle=True)
+pose = mp_pose.Pose() # the landmark detector
+model = load_model('pose_action_lstm_model.h5') # the pose predictor
+label_encoder = np.load('label_encoder_classes.npy', allow_pickle=True) # class labels
 
 # model params
-sequence_length = 70  
-movement_compare_gap = 40  
+sequence_length = 70 # frames per sequence
+movement_compare_gap = 40
 movement_threshold = 0.02  
 
-frame_window = deque(maxlen=sequence_length)
-keypoints_history = deque(maxlen=movement_compare_gap + 1)
+frame_window = deque(maxlen=sequence_length) # recent keypoints
+keypoints_history = deque(maxlen=movement_compare_gap + 1) # historical keypoints
 
 cap = cv2.VideoCapture(0)
 
@@ -31,6 +33,7 @@ def extract_keypoints(results):
         return keypoints
     return None
 
+# will help differentiate the pushup from the plank
 def is_moving_from_past(history, current_kp, threshold):
     if len(history) < movement_compare_gap:
         return True 
@@ -78,7 +81,7 @@ while cap.isOpened():
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     cv2.imshow('Pose Action Recognition', image)
-    if cv2.waitKey(10) & 0xFF == ord('q'):
+    if cv2.waitKey(10) & 0xFF == ord('q'): # press 'q' to quit
         break
 
 cap.release()
