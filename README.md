@@ -22,6 +22,9 @@ Training dataset:
 https://github.com/kreatain/AI-Fitness-Trainer
 
 ## Project Structure
+## 📁 Project Structure
+
+```
 .
 ├── data/
 │   ├── plank/            # Training/testing videos for plank action (MP4 format)
@@ -31,13 +34,14 @@ https://github.com/kreatain/AI-Fitness-Trainer
 ├── pushup.py             # Real-time push-up feedback and counter
 ├── plank.py              # Real-time plank timer with form correction
 ├── main.py               # Entry point: recognizes action and routes to correct script
-├── generate_pose_dataset.py # Extracts pose keypoints from videos to CSV
+├── generate_pose_dataset.py   # Extracts pose keypoints from videos to CSV
 ├── pose_dataset.csv      # Extracted keypoints used for LSTM training
 ├── train_lstm_model.py   # Trains LSTM model for action recognition
-├── pose_action_lstm_model.h5 # Trained LSTM model
-├── label_encoder_classes.npy # Encoded class labels
+├── pose_action_lstm_model.h5  # Trained LSTM model
+├── label_encoder_classes.npy  # Encoded class labels
 ├── requirements.txt      # Python dependencies
 └── README.md             # Project overview and instructions
+```
 
 ## Features
 
@@ -73,12 +77,16 @@ python main.py
 - Press R to start countdown and begin detection
 - The system will detect your action and launch the appropriate form-checking script
 
-## Model Training
+## 🧠 Model Training
+
 If you want to re-train the model:
-	1.	Place videos under data/ folder (one action per video)
-	2.	Run:
-    ```bash
-    python generate_pose_dataset.py
-    python train_lstm_model.py
-    ```
-This will produce the .csv, .h5, and .npy files for prediction.
+
+1. Place videos under the `data/` folder (one action per video)
+2. Run the following commands:
+
+   ```bash
+   python generate_pose_dataset.py
+   python train_lstm_model.py
+   ```
+
+This will produce the `.csv`, `.h5`, and `.npy` files for prediction.
