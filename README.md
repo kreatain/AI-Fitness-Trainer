@@ -77,7 +77,7 @@ python main.py
 - Press R to start countdown and begin detection
 - The system will detect your action and launch the appropriate form-checking script
 
-## 🧠 Model Training
+## Model Training
 
 If you want to re-train the model:
 
