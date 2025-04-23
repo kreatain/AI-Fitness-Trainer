@@ -13,10 +13,12 @@ Our group is developing an AI fitness trainer that uses real-time pose estimatio
 ## URLs
 
 Presentation video:
-
+ - [CS5330_Final_Project_Presentation_Video.mp4](https://drive.google.com/file/d/1rdWdOXW_3KhWXEH11lgqrl8R3j1zm89f/view?usp=sharing)
 
 Demo video:
-
+ - [squat.MOV](https://drive.google.com/file/d/1ePGWh9qHwNj4JK2KcrssFtmlN73vnRaJ/view?usp=sharing)
+ - [pushup.MOV](https://drive.google.com/file/d/1SQaf-86d028bYhU9fnV9NZq4rOELfkI3/view?usp=sharing)
+ - [plank.MOV](https://drive.google.com/file/d/1_9y8h_3vN153xu_th7ZMQGnoWa_6tsV8/view?usp=sharing)
 
 Training dataset:
 https://github.com/kreatain/AI-Fitness-Trainer
