@@ -9,6 +9,8 @@ __pycache__/
 # Virtual environments
 .venv/
 mp_env_3114/
+venv/
+venv39/
 
 # VSCode or PyCharm project files
 .vscode/
